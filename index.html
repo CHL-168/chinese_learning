@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>時代華語 2｜第9課：你怕考試嗎？互動教學平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background-color: #f8fafc;
+    }
+    .badge-orig {
+      background-color: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .badge-ai {
+      background-color: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #d8b4fe;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .tab-active {
+      border-bottom: 3px solid #2563eb;
+      color: #1d4ed8;
+      font-weight: 700;
+      background-color: #eff6ff;
+    }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+  <!-- 頂部導覽列 -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center gap-3">
+        <span class="bg-blue-600 text-white font-bold px-3 py-1.5 rounded-lg text-sm shadow-sm">時代華語 2</span>
+        <div>
+          <h1 class="text-lg sm:text-xl font-bold text-slate-900">第 9 課：你怕考試嗎？</h1>
+          <p class="text-xs text-slate-500">Are You Afraid of Taking Exams?｜互動備課與教學模組</p>
+        </div>
+      </div>
+
+      <!-- 工具控制區 -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="badge-orig">📘 原教材內容</span>
+        <span class="badge-ai">✨ AI 補充活動</span>
+        
+        <button onclick="toggleCharMode()" id="btn-char-mode" class="text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition">
+          正體 / 簡體
+        </button>
+        <button onclick="togglePinyin()" id="btn-pinyin" class="text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition">
+          顯示/隱藏拼音
+        </button>
+        <button onclick="toggleEnglish()" id="btn-english" class="text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition">
+          顯示/隱藏英譯
+        </button>
+        <button onclick="toggleChecklistModal()" class="text-xs sm:text-sm bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-medium shadow-sm transition flex items-center gap-1">
+          📋 教師審核清單
+        </button>
+        <button onclick="toggleAudioModal()" class="text-xs sm:text-sm bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg font-medium shadow-sm transition flex items-center gap-1">
+          ⚙️ 音訊網址設定
+        </button>
+      </div>
+    </div>
+
+    <!-- 模組分頁切換 -->
+    <nav class="max-w-6xl mx-auto px-4 flex overflow-x-auto border-t border-slate-100">
+      <button onclick="switchTab('tab-dialogue')" id="nav-dialogue" class="tab-btn tab-active px-4 sm:px-5 py-3 text-sm whitespace-nowrap transition rounded-t-lg">
+        💬 1. 對話課文
+      </button>
+      <button onclick="switchTab('tab-vocab')" id="nav-vocab" class="tab-btn px-4 sm:px-5 py-3 text-sm whitespace-nowrap text-slate-600 hover:text-blue-600 transition rounded-t-lg">
+        🗂️ 2. 生詞學習與測驗
+      </button>
+      <button onclick="switchTab('tab-grammar')" id="nav-grammar" class="tab-btn px-4 sm:px-5 py-3 text-sm whitespace-nowrap text-slate-600 hover:text-blue-600 transition rounded-t-lg">
+        📐 3. 語法解析與練習
+      </button>
+      <button onclick="switchTab('tab-reading')" id="nav-reading" class="tab-btn px-4 sm:px-5 py-3 text-sm whitespace-nowrap text-slate-600 hover:text-blue-600 transition rounded-t-lg">
+        📖 4. 短文閱讀
+      </button>
+      <button onclick="switchTab('tab-activity')" id="nav-activity" class="tab-btn px-4 sm:px-5 py-3 text-sm whitespace-nowrap text-slate-600 hover:text-blue-600 transition rounded-t-lg">
+        🎯 5. 綜合互動與課室活動
+      </button>
+    </nav>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+    <!-- ================= TAB 1: 對話課文 ================= -->
+    <section id="tab-dialogue" class="tab-content space-y-6">
+      <!-- 音訊播放器區塊 (09-1) -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold shrink-0">09-1</div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="font-bold text-slate-800">對話音訊：你怕考試嗎？</h2>
+              <span class="badge-orig">📘 原教材音軌預留</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5" id="status-audio-09-1">尚未設定音訊網址（請點擊右上角「⚙️ 音訊網址設定」填入）</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <audio id="player-09-1" controls class="h-9 w-full sm:w-64 rounded-lg"></audio>
+          <select onchange="changeSpeed('player-09-1', this.value)" class="text-xs border border-slate-300 rounded-lg px-2 py-2 bg-slate-50 font-medium">
+            <option value="0.75">0.75x 慢速</option>
+            <option value="1" selected>1.0x 正常</option>
+            <option value="1.25">1.25x 快速</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 角色篩選與對話呈現 -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-slate-50 px-5 py-3 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-slate-800">課文對話內容</h3>
+            <span class="badge-orig">📘 原教材 (p.201-204)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs flex-wrap">
+            <span class="text-slate-500">角色扮演遮罩：</span>
+            <button onclick="setRoleMask('all')" class="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-medium transition" id="role-all">全部顯示</button>
+            <button onclick="setRoleMask('meixin')" class="px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition" id="role-meixin">隱藏美心 (練習美心)</button>
+            <button onclick="setRoleMask('kexin')" class="px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition" id="role-kexin">隱藏可欣 (練習可欣)</button>
+          </div>
+        </div>
+
+        <div class="divide-y divide-slate-100 p-5 space-y-4" id="dialogue-container">
+          <!-- 對話透過 JS 動態渲染 -->
+        </div>
+      </div>
+
+      <!-- 原教材問題與討論 + AI 理解測驗 -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- 原教材 Questions & Discussion -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-bold text-slate-800 text-lg">問題與討論 (Questions & Discussion)</h3>
+            <span class="badge-orig">📘 原教材 (p.202)</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-3 text-sm text-slate-700 leading-relaxed">
+            <li>已經半夜了，為什麼可欣還不睡覺？這樣對身體好嗎？</li>
+            <li>可欣的作業多不多？考試難不難？她擔心不用功會怎麼樣？</li>
+            <li>「日本歷史」這門課不輕鬆，為什麼可欣要修？如果是你，你也要修嗎？為什麼？</li>
+            <li>美心修的課比較輕鬆嗎？為什麼？如果可以選，你要考試還是寫報告？為什麼？</li>
+            <li>可欣跟美心考試的時候，覺得怎麼樣？你呢？</li>
+            <li>在你的國家，考試的分數重要嗎？你每天要念多少時間的書才有好成績？</li>
+            <li>學校的成績會不會影響你將來的工作？成績好的人一定找得到好工作嗎？為什麼？</li>
+          </ol>
+        </div>
+
+        <!-- AI 補充：對話理解即時測驗 -->
+        <div class="bg-white p-5 rounded-xl border border-purple-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-bold text-purple-900 text-lg">對話理解自我檢測</h3>
+            <span class="badge-ai">✨ AI 補充活動</span>
+          </div>
+          <div id="dialogue-quiz-container" class="space-y-4 text-sm">
+            <!-- JS 渲染選擇題 -->
+          </div>
+          <button onclick="checkDialogueQuiz()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition text-sm shadow-sm">
+            核對答案
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: 生詞學習與測驗 ================= -->
+    <section id="tab-vocab" class="tab-content hidden space-y-6">
+      <!-- 音訊播放器區塊 (09-2 & 09-4) -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-sm text-blue-700">09-2 對話生詞音訊</span>
+              <span class="badge-orig">📘 原教材預留</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5" id="status-audio-09-2">尚未設定音訊網址</p>
+          </div>
+          <audio id="player-09-2" controls class="h-8 w-full sm:w-48 rounded-lg"></audio>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-sm text-emerald-700">09-4 短文生詞音訊</span>
+              <span class="badge-orig">📘 原教材預留</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5" id="status-audio-09-4">尚未設定音訊網址</p>
+          </div>
+          <audio id="player-09-4" controls class="h-8 w-full sm:w-48 rounded-lg"></audio>
+        </div>
+      </div>
+
+      <!-- 生詞篩選與搜尋控制 -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap justify-between items-center gap-3">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="filterVocab('all')" id="vbtn-all" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white">全部生詞 (55)</button>
+          <button onclick="filterVocab('dialogue')" id="vbtn-dialogue" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">對話生詞 (34)</button>
+          <button onclick="filterVocab('reading')" id="vbtn-reading" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">短文生詞 (21)</button>
+        </div>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <input type="text" id="vocab-search" oninput="renderVocab()" placeholder="搜尋漢字、拼音或英譯..." class="w-full sm:w-64 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
+        </div>
+      </div>
+
+      <!-- 生詞卡片網格 -->
+      <div id="vocab-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- JS 動態生成生詞卡 -->
+      </div>
+
+      <!-- AI 補充：生詞選詞填空練習 -->
+      <div class="bg-white p-6 rounded-xl border border-purple-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-bold text-purple-900 text-lg">生詞語境填空練習</h3>
+            <p class="text-xs text-slate-500">請根據句意，從下拉選單中選出最適當的本課生詞。</p>
+          </div>
+          <span class="badge-ai">✨ AI 補充活動</span>
+        </div>
+        <div id="vocab-cloze-container" class="space-y-3 text-sm">
+          <!-- JS 渲染填空題 -->
+        </div>
+        <button onclick="checkVocabCloze()" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition text-sm shadow-sm">
+          檢查填空答案
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: 語法解析與練習 ================= -->
+    <section id="tab-grammar" class="tab-content hidden space-y-6">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-2" id="grammar-nav">
+        <!-- JS 渲染 7 個語法點快速切換按鈕 -->
+      </div>
+
+      <div id="grammar-detail-container" class="space-y-6">
+        <!-- JS 渲染語法解析、原書例句、原書情境練習 + AI 補充互動題 -->
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: 短文閱讀 ================= -->
+    <section id="tab-reading" class="tab-content hidden space-y-6">
+      <!-- 音訊播放器區塊 (09-3) -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">09-3</div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="font-bold text-slate-800">短文音訊：山本良介的留學生活</h2>
+              <span class="badge-orig">📘 原教材音軌預留</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5" id="status-audio-09-3">尚未設定音訊網址（請點擊右上角「⚙️ 音訊網址設定」填入）</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <audio id="player-09-3" controls class="h-9 w-full sm:w-64 rounded-lg"></audio>
+          <select onchange="changeSpeed('player-09-3', this.value)" class="text-xs border border-slate-300 rounded-lg px-2 py-2 bg-slate-50 font-medium">
+            <option value="0.75">0.75x 慢速</option>
+            <option value="1" selected>1.0x 正常</option>
+            <option value="1.25">1.25x 快速</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 短文內容顯示 -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-slate-50 px-5 py-3 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-slate-800">短文：山本良介的留學生活</h3>
+            <span class="badge-orig">📘 原教材 (p.213-215)</span>
+          </div>
+          <span class="text-xs text-slate-500">可搭配上方工具列切換正簡體、拼音與英譯</span>
+        </div>
+        <div class="p-6 space-y-5 leading-loose text-lg" id="reading-container">
+          <!-- JS 渲染短文段落 -->
+        </div>
+      </div>
+
+      <!-- 原教材短文討論 + AI 閱讀理解 -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-bold text-slate-800 text-lg">短文問題與討論</h3>
+            <span class="badge-orig">📘 原教材 (p.214)</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-3 text-sm text-slate-700 leading-relaxed">
+            <li>良介覺得學中文難不難？為什麼？你呢？為什麼？</li>
+            <li>良介上中文課的時候，要做什麼？你上中文課的時候，也做這些練習嗎？</li>
+            <li>良介中文課的期末考要考什麼？要怎麼做，成績才會比較好？</li>
+            <li>良介平常怎麼練習中文？你呢？</li>
+            <li>如果不小心迷路了，良介有辦法回家嗎？你在台灣迷過路嗎？</li>
+            <li>什麼事讓良介很煩惱？你會給他什麼建議？</li>
+          </ol>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-purple-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-bold text-purple-900 text-lg">短文是非題檢測 (True / False)</h3>
+            <span class="badge-ai">✨ AI 補充活動</span>
+          </div>
+          <div id="reading-tf-container" class="space-y-3 text-sm">
+            <!-- JS 渲染是非題 -->
+          </div>
+          <button onclick="checkReadingTF()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition text-sm shadow-sm">
+            核對短文理解
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 5: 綜合互動與課室活動 ================= -->
+    <section id="tab-activity" class="tab-content hidden space-y-6">
+      <!-- 原教材課室活動 1：中文難不難 -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-bold text-slate-800 text-lg">課室活動（一）：中文難不難？調查表</h3>
+            <p class="text-sm text-slate-600">請你問一問同學，他們覺得學中文的時候，聽、說、讀、寫，哪一個最難（請打勾）？為什麼？</p>
+          </div>
+          <span class="badge-orig">📘 原教材 (p.220)</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left border border-slate-200 rounded-lg">
+            <thead class="bg-slate-100 text-slate-700">
+              <tr>
+                <th class="p-3 border-b">同學姓名</th>
+                <th class="p-3 border-b">國家</th>
+                <th class="p-3 border-b text-center">聽</th>
+                <th class="p-3 border-b text-center">說</th>
+                <th class="p-3 border-b text-center">讀</th>
+                <th class="p-3 border-b text-center">寫</th>
+                <th class="p-3 border-b">為什麼？</th>
+              </tr>
+            </thead>
+            <tbody id="survey-tbody" class="divide-y divide-slate-200">
+              <tr class="bg-blue-50/50">
+                <td class="p-3 font-medium">山本良介 (範例)</td>
+                <td class="p-3">日本</td>
+                <td class="p-3 text-center"></td>
+                <td class="p-3 text-center text-blue-600 font-bold">✓</td>
+                <td class="p-3 text-center"></td>
+                <td class="p-3 text-center"></td>
+                <td class="p-3">中文的聲調常說錯。</td>
+              </tr>
+              <tr>
+                <td class="p-2"><input type="text" placeholder="輸入同學姓名" class="w-full border rounded-lg px-2 py-1"></td>
+                <td class="p-2"><input type="text" placeholder="國家" class="w-full border rounded-lg px-2 py-1"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2"><input type="text" placeholder="原因..." class="w-full border rounded-lg px-2 py-1"></td>
+              </tr>
+              <tr>
+                <td class="p-2"><input type="text" placeholder="輸入同學姓名" class="w-full border rounded-lg px-2 py-1"></td>
+                <td class="p-2"><input type="text" placeholder="國家" class="w-full border rounded-lg px-2 py-1"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2 text-center"><input type="checkbox" class="w-4 h-4"></td>
+                <td class="p-2"><input type="text" placeholder="原因..." class="w-full border rounded-lg px-2 py-1"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 任務 2：詞彙勾選造句 -->
+        <div class="pt-4 border-t border-slate-100 space-y-3">
+          <p class="text-sm font-medium text-slate-700">2. 為了讓你的中文進步，你可以怎麼做？請點擊下方生詞/語法加入你的口頭報告草稿：</p>
+          <div class="flex flex-wrap gap-2" id="word-bank-chips">
+            <button onclick="insertChip('生字')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 生字</button>
+            <button onclick="insertChip('聲調')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 聲調</button>
+            <button onclick="insertChip('文法')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 文法</button>
+            <button onclick="insertChip('用功')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 用功</button>
+            <button onclick="insertChip('考試')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 考試</button>
+            <button onclick="insertChip('報告')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 報告</button>
+            <button onclick="insertChip('表達')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 表達</button>
+            <button onclick="insertChip('能力')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 能力</button>
+            <button onclick="insertChip('查字典')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 查字典</button>
+            <button onclick="insertChip('課堂小考')" class="px-3 py-1 bg-slate-100 hover:bg-blue-100 text-slate-700 rounded-full text-xs font-medium transition">+ 課堂小考</button>
+          </div>
+          <textarea id="speaking-draft" rows="3" placeholder="點擊上方詞彙或直接在此輸入你的想法..." class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+      </div>
+
+      <!-- 原教材課室活動 2：你想在哪裡讀書？ -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-bold text-slate-800 text-lg">課室活動（二）：你想在哪裡讀書？</h3>
+            <p class="text-sm text-slate-600">你覺得在國內讀書還是出國留學比較好？請跟同學討論討論並記錄優缺點。</p>
+          </div>
+          <span class="badge-orig">📘 原教材 (p.221)</span>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50/50">
+            <h4 class="font-bold text-blue-800 text-center border-b pb-2">🏠 在國內讀書</h4>
+            <div>
+              <label class="text-xs font-bold text-emerald-700">👍 好處 (Pros)：</label>
+              <textarea rows="2" class="w-full mt-1 border rounded-lg p-2 text-sm bg-white" placeholder="例如：住在家裡比較省錢、不用擔心語言問題..."></textarea>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-rose-700">👎 壞處 (Cons)：</label>
+              <textarea rows="2" class="w-full mt-1 border rounded-lg p-2 text-sm bg-white" placeholder="例如：比較難練習外語、沒有留學生活經驗..."></textarea>
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50/50">
+            <h4 class="font-bold text-indigo-800 text-center border-b pb-2">✈️ 出國留學</h4>
+            <div>
+              <label class="text-xs font-bold text-emerald-700">👍 好處 (Pros)：</label>
+              <textarea rows="2" class="w-full mt-1 border rounded-lg p-2 text-sm bg-white" placeholder="例如：可以交很多外國朋友、讓外語能力進步得很快..."></textarea>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-rose-700">👎 壞處 (Cons)：</label>
+              <textarea rows="2" class="w-full mt-1 border rounded-lg p-2 text-sm bg-white" placeholder="例如：學費跟生活費比較貴、剛開始容易迷路或想家..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 教師審核清單 Modal -->
+  <div id="checklist-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-lg text-slate-900">📋 教師審核清單 (Teacher Verification Checklist)</h3>
+        <button onclick="toggleChecklistModal()" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
+      </div>
+      <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+        <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+          <input type="checkbox" class="mt-1 w-4 h-4 text-emerald-600">
+          <span><strong>1. 音訊網址設定：</strong>點擊右上角「⚙️ 音訊網址設定」，貼上對話 (09-1)、對話生詞 (09-2)、短文 (09-3)、短文生詞 (09-4) 的音檔網址或相對路徑。</span>
+        </label>
+        <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+          <input type="checkbox" class="mt-1 w-4 h-4 text-emerald-600">
+          <span><strong>2. 原教材缺漏字修復確認：</strong>PDF 掃描檔中模糊處已依《時代華語 2》原書精準還原（如：語法 I 結構 <code>S+不(是)+V(+O)+嗎？</code>、語法 IV 疑問詞、短文語法練習選項「髒、暖和、舒服、開心」）。</span>
+        </label>
+        <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+          <input type="checkbox" class="mt-1 w-4 h-4 text-emerald-600">
+          <span><strong>3. 詞性與拼音標註確認：</strong>生詞表維持原書詞性標註（N, V, Vs, Vi, V-sep, Prep, M, Adv）與中英例句對照。</span>
+        </label>
+        <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+          <input type="checkbox" class="mt-1 w-4 h-4 text-emerald-600">
+          <span><strong>4. AI 補充活動難易度審核：</strong>標註 <code>✨ AI 補充</code> 之選擇題、生詞填空與是非題皆控制在《時代華語 1~2》詞彙範圍內。</span>
+        </label>
+      </div>
+      <div class="flex justify-end pt-3 border-t">
+        <button onclick="toggleChecklistModal()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium">完成檢視</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 教師音訊網址設定 Modal -->
+  <div id="audio-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-lg text-slate-900">⚙️ 教師音訊網址設定</h3>
+        <button onclick="toggleAudioModal()" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        請在下方貼上您的音檔網址（支援 <code>https://...</code> 雲端網址，或本地相對路徑如 <code>audio/09-1.mp3</code>）。按下「套用音訊」後將即刻連動頁面內的音訊播放器。
+      </p>
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">09-1 對話課文音訊：</label>
+          <input type="text" id="input-audio-09-1" placeholder="例如：./audio/09-1.mp3 或 https://..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">09-2 對話生詞音訊：</label>
+          <input type="text" id="input-audio-09-2" placeholder="例如：./audio/09-2.mp3" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">09-3 短文課文音訊：</label>
+          <input type="text" id="input-audio-09-3" placeholder="例如：./audio/09-3.mp3" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">09-4 短文生詞音訊：</label>
+          <input type="text" id="input-audio-09-4" placeholder="例如：./audio/09-4.mp3" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-3 border-t">
+        <button onclick="toggleAudioModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm font-medium">取消</button>
+        <button onclick="saveAudioUrls()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">套用音訊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部資訊 -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-8 text-center text-xs text-slate-500">
+    教材來源：《時代華語 2》第 9 課〈你怕考試嗎？〉｜明確區分「📘 原教材內容」與「✨ AI 補充活動」
+  </footer>
+
+  <!-- ================= JAVASCRIPT 資料與互動邏輯 ================= -->
+  <script>
+    // 狀態管理 (In-Memory State)
+    let isSimp = false;
+    let showPinyin = true;
+    let showEng = true;
+    let roleMask = 'all';
+    let currentVocabFilter = 'all';
+    let currentGrammarIdx = 0;
+    const audioUrls = { '09-1': '', '09-2': '', '09-3': '', '09-4': '' };
+
+    // 1. 對話資料 (原教材 p.201-204)
+    const dialogueData = [
+      {
+        speaker: "美心", role: "meixin",
+        trad: "（看看牆上的鐘）可欣，已經十二點多了，妳明天早上不是有課嗎？快點兒去睡吧！",
+        simp: "（看看墙上的钟）可欣，已经十二点多了，妳明天早上不是有课吗？快点儿去睡吧！",
+        pinyin: "(Kànkan qiáng shàng de zhōng) Kěxīn, yǐjīng shí'èr diǎn duō le, nǐ míngtiān zǎoshang bú shì yǒu kè ma? Kuài diǎnr qù shuì ba!",
+        eng: "(Looking at the clock on the wall) Kexin, it's already past 12 o'clock. Don't you have classes tomorrow morning? Hurry up and go to sleep!"
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "我還不能睡。後天日本歷史的考試要從第五課考到第八課，（她翻了翻書）我還有十幾頁沒念。",
+        simp: "我还不能睡。后天日本历史的考试要从第五课考到第八课，（她翻了翻书）我还有十几页没念。",
+        pinyin: "Wǒ hái bù néng shuì. Hòutiān Rìběn lìshǐ de kǎoshì yào cóng dì wǔ kè kǎo dào dì bā kè, (tā fān le fān shū) wǒ hái yǒu shí jǐ yè méi niàn.",
+        eng: "I can't go to sleep yet. The Japanese history exam the day after tomorrow will cover lessons 5 to 8. (She flipped through the book) I still have more than 10 pages to finish."
+      },
+      {
+        speaker: "美心", role: "meixin",
+        trad: "可是妳最近都只吃三明治，又很晚才睡，這樣對身體不好吧？",
+        simp: "可是妳最近都只吃三明治，又很晚才睡，这样对身体不好吧？",
+        pinyin: "Kěshì nǐ zuìjìn dōu zhǐ chī sānmíngzhì, yòu hěn wǎn cái shuì, zhèyàng duì shēntǐ bù hǎo ba?",
+        eng: "But you've been recently eating only sandwiches, and you go to sleep very late. It isn't good for your body, is it?"
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "沒辦法。這門課除了有課堂小考，期末還要考口試和寫一篇作文。要是不用功一點兒，就會被當的！",
+        simp: "没办法。这门课除了有课堂小考，期末还要考口试和写一篇作文。要是不用功一点儿，就会被当的！",
+        pinyin: "Méi bànfǎ. Zhè mén kè chúle yǒu kètáng xiǎokǎo, qīmò hái yào kǎo kǒushì hé xiě yì piān zuòwén. Yàoshi bú yònggōng yìdiǎnr, jiù huì bèi dàng de!",
+        eng: "There's no other way. In this course there are classroom quizzes. Moreover, at the end of the semester, we have to take an oral exam and write a composition. If we don't study harder, we may flunk the course!"
+      },
+      {
+        speaker: "美心", role: "meixin",
+        trad: "聽起來很辛苦，妳為什麼要修這門課呢？",
+        simp: "听起来很辛苦，妳为什么要修这门课呢？",
+        pinyin: "Tīng qǐlái hěn xīnkǔ, nǐ wèishénme yào xiū zhè mén kè ne?",
+        eng: "Sounds tough. Why did you want to take this course?"
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "因為那位教授的知識很豐富，教法也很好。",
+        simp: "因为那位教授的知识很丰富，教法也很好。",
+        pinyin: "Yīnwèi nà wèi jiàoshòu de zhīshì hěn fēngfù, jiàofǎ yě hěn hǎo.",
+        eng: "Because the professor's knowledge is very vast, and the methods of teaching are very good."
+      },
+      {
+        speaker: "美心", role: "meixin",
+        trad: "我們義大利文系的課好像比較輕鬆。這學期我沒修多少課，只有一門文法課要考筆試，其他兩門課只要交報告就好了。",
+        simp: "我们意大利文系的课好像比较轻松。这学期我没修多少课，只有一门文法课要考笔试，其他两门课只要交报告就好了。",
+        pinyin: "Wǒmen Yìdàlìwén xì de kè hǎoxiàng bǐjiào qīngsōng. Zhè xuéqī wǒ méi xiū duōshǎo kè, zhǐ yǒu yì mén wénfǎ kè yào kǎo bǐshì, qítā liǎng mén kè zhǐyào jiāo bàogào jiù hǎo le.",
+        eng: "Courses of the Department of Italian Language seem more laid-back. This semester I don't take too many courses. There is only one grammar course in which I have to take a written exam. In the other two, I only need to hand in reports."
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "如果沒有期末考，教授怎麼給你們成績呢？",
+        simp: "如果没有期末考，教授怎么给你们成绩呢？",
+        pinyin: "Rúguǒ méiyǒu qīmòkǎo, jiàoshòu zěnme gěi nǐmen chéngjì ne?",
+        eng: "How does the professor score you if there is no final exam?"
+      },
+      {
+        speaker: "美心", role: "meixin",
+        trad: "只要平常認真上課、多查字典，把他要我們翻譯的文章翻好，期末成績就不會太差。",
+        simp: "只要平常认真上课、多查字典，把他要我们翻译的文章翻好，期末成绩就不会太差。",
+        pinyin: "Zhǐyào píngcháng rènzhēn shàngkè, duō chá zìdiǎn, bǎ tā yào wǒmen fānyì de wénzhāng fān hǎo, qīmò chéngjì jiù bú huì tài chà.",
+        eng: "As long as we concentrate in class, use the dictionary often, and translate the articles he assigns, our final scores won't be too bad."
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "怎麼這麼好！上次考試我太緊張，有幾題沒寫完，考得比較差，這次我一定要更努力！",
+        simp: "怎么这么好！上次考试我太紧张，有几题没写完，考得比较差，这次我一定要更努力！",
+        pinyin: "Zěnme zhème hǎo! Shàng cì kǎoshì wǒ tài jǐnzhāng, yǒu jǐ tí méi xiě wán, kǎo de bǐjiào chà, zhè cì wǒ yídìng yào gèng nǔlì!",
+        eng: "How can it be that good! I was too stressed on my last exam. I didn't finish several questions, so I got a worse grade. This time I must work harder!"
+      },
+      {
+        speaker: "美心", role: "meixin",
+        trad: "我小時候也很怕考試，有時候一緊張就吃不下飯，現在好多了。",
+        simp: "我小时候也很怕考试，有时候一紧张就吃不下饭，现在好多了。",
+        pinyin: "Wǒ xiǎoshíhòu yě hěn pà kǎoshì, yǒushíhòu yì jǐnzhāng jiù chī bú xià fàn, xiànzài hǎo duō le.",
+        eng: "When I was little, I was afraid of taking exams, too. Sometimes I was so stressed that I couldn't eat, but it's much better now."
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "我覺得平常就應該多讀書，讓自己的能力更好，將來才比較容易找到好工作。",
+        simp: "我觉得平常就应该多读书，让自己的能力更好，将来才比较容易找到好工作。",
+        pinyin: "Wǒ juéde píngcháng jiù yīnggāi duō dúshū, ràng zìjǐ de nénglì gèng hǎo, jiānglái cái bǐjiào róngyì zhǎodào hǎo gōngzuò.",
+        eng: "I think we should normally study more to improve our ability. In the future it will be easier to find a good job."
+      },
+      {
+        speaker: "美心", role: "meixin",
+        trad: "念書當然很重要，可是妳今天念的書已經夠多了，現在最重要的是睡覺喔！",
+        simp: "念书当然很重要，可是妳今天念的书已经够多了，现在最重要的是睡觉喔！",
+        pinyin: "Niànshū dāngrán hěn zhòngyào, kěshì nǐ jīntiān niàn de shū yǐjīng gòu duō le, xiànzài zuì zhòngyào de shì shuìjiào o!",
+        eng: "Although studying is certainly important, you have already studied enough for today. For now, the most important thing is sleep!"
+      },
+      {
+        speaker: "可欣", role: "kexin",
+        trad: "好好好，我把這一頁念完就去洗澡、睡覺。明天再加油吧！",
+        simp: "好好好，我把这一页念完就去洗澡、睡觉。明天再加油吧！",
+        pinyin: "Hǎo hǎo hǎo, wǒ bǎ zhè yí yè niàn wán jiù qù xǐzǎo, shuìjiào. Míngtiān zài jiāyóu ba!",
+        eng: "Alright, alright, alright! When I finish reading this page, I'll take a bath and go to bed right away. Tomorrow keep going!"
+      }
+    ];
+
+    // AI 補充：對話選擇題
+    const dialogueQuizData = [
+      {
+        q: "1. 可欣後天的「日本歷史」考試範圍是什麼？",
+        options: ["從第一課考到第四課", "從第五課考到第八課", "整本書都要考"],
+        ans: 1
+      },
+      {
+        q: "2. 根據對話，可欣修的「日本歷史」課，期末要考什麼？",
+        options: ["只要交一份報告", "考筆試跟翻譯文章", "考口試和寫一篇作文"],
+        ans: 2
+      },
+      {
+        q: "3. 美心小時候遇到考試太緊張時，會有什麼反應？",
+        options: ["吃不下飯", "只吃三明治", "睡不著覺"],
+        ans: 0
+      }
+    ];
+
+    // 2. 生詞資料 (原教材 p.205-207, p.216-217)
+    const vocabData = [
+      { sec: "dialogue", trad: "鐘", simp: "钟", pinyin: "zhōng", pos: "N", eng: "clock, bell", ex: "" },
+      { sec: "dialogue", trad: "到", simp: "到", pinyin: "dào", pos: "Prep", eng: "to", ex: "" },
+      { sec: "dialogue", trad: "翻", simp: "翻", pinyin: "fān", pos: "V", eng: "to turn, to leaf", ex: "現在開始上課。請大家把書翻到第九課。" },
+      { sec: "dialogue", trad: "頁", simp: "页", pinyin: "yè", pos: "M", eng: "page", ex: "這本中文書，我念到第四十三頁了。" },
+      { sec: "dialogue", trad: "三明治", simp: "三明治", pinyin: "sānmíngzhì", pos: "N", eng: "sandwich", ex: "" },
+      { sec: "dialogue", trad: "門", simp: "门", pinyin: "mén", pos: "M", eng: "measure word for courses", ex: "這學期我選了三門課，聽說都不輕鬆。" },
+      { sec: "dialogue", trad: "課堂", simp: "课堂", pinyin: "kètáng", pos: "N", eng: "classroom", ex: "" },
+      { sec: "dialogue", trad: "期末", simp: "期末", pinyin: "qīmò", pos: "N", eng: "end of semester", ex: "" },
+      { sec: "dialogue", trad: "口試", simp: "口试", pinyin: "kǒushì", pos: "N/Vi", eng: "oral test; to have an oral test", ex: "下星期一有課堂小考和口試，我得好好準備。 / 我上次口試的時候太緊張，所以沒聽懂老師問的問題。" },
+      { sec: "dialogue", trad: "篇", simp: "篇", pinyin: "piān", pos: "M", eng: "measure word for article", ex: "" },
+      { sec: "dialogue", trad: "作文", simp: "作文", pinyin: "zuòwén", pos: "N/Vi", eng: "composition (M: 篇); to write a composition", ex: "這個週末我得寫一篇五百字的作文。 / 我不喜歡作文，因為我常常不知道要寫什麼。" },
+      { sec: "dialogue", trad: "用功", simp: "用功", pinyin: "yònggōng", pos: "Vs", eng: "to study hard, diligent in learning", ex: "" },
+      { sec: "dialogue", trad: "當", simp: "当", pinyin: "dàng", pos: "Vpt", eng: "to fail, to flunk", ex: "這門課很難，我得用功一點兒，要不然老師可能會當了我。" },
+      { sec: "dialogue", trad: "修", simp: "修", pinyin: "xiū", pos: "V", eng: "to take (a course)", ex: "" },
+      { sec: "dialogue", trad: "教授", simp: "教授", pinyin: "jiàoshòu", pos: "N", eng: "professor", ex: "聽說王教授的課很有意思，下學期我要修他的課。" },
+      { sec: "dialogue", trad: "知識", simp: "知识", pinyin: "zhīshì", pos: "N", eng: "knowledge", ex: "" },
+      { sec: "dialogue", trad: "豐富", simp: "丰富", pinyin: "fēngfù", pos: "Vs", eng: "abundant", ex: "因為今天是爸爸的生日，所以晚餐非常豐富。 / 如果你希望有豐富的知識，就應該用功讀書。" },
+      { sec: "dialogue", trad: "教法", simp: "教法", pinyin: "jiàofǎ", pos: "N", eng: "teaching method", ex: "那位教授的教法很好，很多學生都想修他的課。" },
+      { sec: "dialogue", trad: "系", simp: "系", pinyin: "xì", pos: "N", eng: "(college) department", ex: "" },
+      { sec: "dialogue", trad: "文法", simp: "文法", pinyin: "wénfǎ", pos: "N", eng: "grammar", ex: "" },
+      { sec: "dialogue", trad: "筆試", simp: "笔试", pinyin: "bǐshì", pos: "N/Vi", eng: "written exam; to have a written test", ex: "這次期末的筆試不太難，大家都考得不錯。 / 今天早上筆試的時候，我寫得太慢了，所以沒寫完。" },
+      { sec: "dialogue", trad: "交", simp: "交", pinyin: "jiāo", pos: "V", eng: "to hand in", ex: "這篇作文明天得交給老師，今天晚上一定得寫完。" },
+      { sec: "dialogue", trad: "報告", simp: "报告", pinyin: "bàogào", pos: "N", eng: "report (M: 份)", ex: "這個週末我得在家做一份報告，不能出去玩。" },
+      { sec: "dialogue", trad: "認真", simp: "认真", pinyin: "rènzhēn", pos: "Vs", eng: "conscientious, earnest, diligent", ex: "他上課的時候很認真，所以功課一直很好。" },
+      { sec: "dialogue", trad: "字典", simp: "字典", pinyin: "zìdiǎn", pos: "N", eng: "dictionary (M: 本/部)", ex: "" },
+      { sec: "dialogue", trad: "翻譯", simp: "翻译", pinyin: "fānyì", pos: "V/N", eng: "to translate, translation, translator", ex: "我每次翻譯日文小說的時候，都要查字典。 / 這篇文章的中文翻譯翻得很好。 / 他的英文、日文都很好，畢業以後想當翻譯。" },
+      { sec: "dialogue", trad: "翻", simp: "翻", pinyin: "fān", pos: "V", eng: "to translate", ex: "" },
+      { sec: "dialogue", trad: "題", simp: "题", pinyin: "tí", pos: "M", eng: "measure word for questions", ex: "這次數學期末考的筆試很難，我有四題寫錯了。" },
+      { sec: "dialogue", trad: "努力", simp: "努力", pinyin: "nǔlì", pos: "Vs", eng: "to make efforts, to strive", ex: "他一直很努力，所以現在當老闆了。" },
+      { sec: "dialogue", trad: "能力", simp: "能力", pinyin: "nénglì", pos: "N", eng: "capability, ability", ex: "" },
+      { sec: "dialogue", trad: "將來", simp: "将来", pinyin: "jiānglái", pos: "N", eng: "in the future", ex: "你得多念一點兒書，將來才有能力當教授。" },
+      { sec: "dialogue", trad: "夠", simp: "够", pinyin: "gòu", pos: "Adv", eng: "enough", ex: "你的能力夠好，做這個工作一定沒問題。" },
+      { sec: "dialogue", trad: "加油", simp: "加油", pinyin: "jiāyóu", pos: "Vi", eng: "to go for it, to cheer", ex: "他明天要參加籃球比賽，我們去幫他加油吧！" },
+      { sec: "dialogue", trad: "義大利 / 期末考", simp: "意大利 / 期末考", pinyin: "Yìdàlì / qīmòkǎo", pos: "Proper/Phrase", eng: "Italy / Final exam", ex: "" },
+
+      // 短文生詞 (09-4)
+      { sec: "reading", trad: "交換", simp: "交换", pinyin: "jiāohuàn", pos: "V", eng: "to exchange", ex: "我跟華語文中心的美國學生語言交換，他教我英文，我教他中文。" },
+      { sec: "reading", trad: "中心", simp: "中心", pinyin: "zhōngxīn", pos: "N", eng: "center", ex: "" },
+      { sec: "reading", trad: "漢語", simp: "汉语", pinyin: "Hànyǔ", pos: "N", eng: "Chinese language, Mandarin", ex: "" },
+      { sec: "reading", trad: "漢字", simp: "汉字", pinyin: "Hànzì", pos: "N", eng: "Chinese character", ex: "" },
+      { sec: "reading", trad: "聲調", simp: "声调", pinyin: "shēngdiào", pos: "N", eng: "tones (of Chinese characters)", ex: "有的日本學生覺得寫漢字不難，可是漢語的聲調很難。" },
+      { sec: "reading", trad: "部分/份", simp: "部分", pinyin: "bùfèn", pos: "N", eng: "part, fraction", ex: "" },
+      { sec: "reading", trad: "生字", simp: "生字", pinyin: "shēngzì", pos: "N", eng: "new vocabulary", ex: "" },
+      { sec: "reading", trad: "清楚", simp: "清楚", pinyin: "qīngchǔ", pos: "Vs", eng: "clearly, clear", ex: "老師把這個生字清楚地寫在黑板上。 / 很多外國學生弄不清楚漢字的聲調。" },
+      { sec: "reading", trad: "造句", simp: "造句", pinyin: "zào jù", pos: "V-sep", eng: "to make a sentence", ex: "老師說得寫了生字、造了句，才可以下課。" },
+      { sec: "reading", trad: "報告", simp: "报告", pinyin: "bàogào", pos: "V", eng: "to report, to make a presentation", ex: "上中文課時，老師要我們用中文報告在台灣的生活。" },
+      { sec: "reading", trad: "表達", simp: "表达", pinyin: "biǎodá", pos: "V", eng: "to express, to convey", ex: "那個外國學生常跟台灣朋友聊天，用中文表達自己的意見。" },
+      { sec: "reading", trad: "意見", simp: "意见", pinyin: "yìjiàn", pos: "N", eng: "points of view, opinion", ex: "" },
+      { sec: "reading", trad: "錯字", simp: "错字", pinyin: "cuòzì", pos: "N", eng: "wrong character", ex: "這篇作文的錯字太多了，所以分數不高。" },
+      { sec: "reading", trad: "交", simp: "交", pinyin: "jiāo", pos: "V", eng: "to make (friends), to associate with", ex: "他在台灣交了很多朋友，每天都過得很開心。" },
+      { sec: "reading", trad: "語法", simp: "语法", pinyin: "yǔfǎ", pos: "N", eng: "grammar", ex: "我覺得「把」的語法很難，造句的時候常弄錯。" },
+      { sec: "reading", trad: "借", simp: "借", pinyin: "jiè", pos: "V", eng: "to borrow, to lend", ex: "" },
+      { sec: "reading", trad: "還", simp: "还", pinyin: "huán", pos: "V", eng: "to give back, to return", ex: "這本書只能借到下個禮拜一，再看兩天就得還了。" },
+      { sec: "reading", trad: "迷路", simp: "迷路", pinyin: "mílù", pos: "Vp-sep", eng: "to get lost, to lose one's way", ex: "外國人覺得台灣人很好，迷路時，都會有人告訴他們怎麼走。" },
+      { sec: "reading", trad: "感動", simp: "感动", pinyin: "gǎndòng", pos: "Vs", eng: "(feeling) moved, touched", ex: "黃小姐生日那天，男朋友送給她九百九十九朵玫瑰花，讓她感動得不得了。" },
+      { sec: "reading", trad: "煩惱", simp: "烦恼", pinyin: "fánnǎo", pos: "Vs", eng: "worried, annoyed, vexed", ex: "他很煩惱，不知道畢業以後要找什麼工作。" },
+      { sec: "reading", trad: "建議", simp: "建议", pinyin: "jiànyì", pos: "N", eng: "suggestion, advice", ex: "我想趁著暑假去旅行，你有什麼建議？" }
+    ];
+
+    // AI 補充：生詞填空題
+    const vocabClozeData = [
+      { prefix: "1. 這學期我選了四", suffix: "課，其中「日本歷史」最難。", ans: "門", options: ["門", "篇", "頁", "題"] },
+      { prefix: "2. 期末考除了考筆試，還要寫一", suffix: "五百字的中文作文。", ans: "篇", options: ["門", "篇", "頁", "題"] },
+      { prefix: "3. 那位教授的知識很", suffix: "，上課的教法也很好。", ans: "豐富", options: ["清楚", "豐富", "認真", "感動"] },
+      { prefix: "4. 這本書我已經看完，明天得去圖書館", suffix: "書。", ans: "還", options: ["借", "交", "還", "修"] },
+      { prefix: "5. 良介不知道畢業後要做什麼，所以覺得很", suffix: "，想請教授給他一些建議。", ans: "煩惱", options: ["感動", "用功", "煩惱", "努力"] }
+    ];
+
+    // 3. 語法資料 (原教材 p.207-212, p.218-219)
+    const grammarData = [
+      {
+        title: "I. 反問句：不是……嗎？ / ……嗎？",
+        page: "p.207-208",
+        structure: "S + 不（是）+ V (+ O) + 嗎？",
+        explanation: "並非真正的疑問句，而是說話者認為所說的事實對方應該已經知道，用來表達提醒、訝異或微帶責備的反問語氣。",
+        examples: [
+          "1. A：這個週末我不知道要做什麼。\n   B：你下個禮拜就要出國留學了，不用準備行李嗎？",
+          "2. A：明天的中文課要考第幾課？\n   B：老師剛剛上課的時候說了好幾次，你沒聽到嗎？",
+          "3. A：我晚上要看那部很有名的韓國連續劇。\n   B：你不是以前看過了嗎？值得再看一次嗎？"
+        ],
+        origExercises: [
+          { q: "① 妹妹：姐姐，我想吃的冰淇淋蛋糕，你＿＿＿＿＿＿＿＿＿＿？\n   姐姐：對不起，我又忘了買！", sample: "不是說今天會買給我嗎 / 沒買嗎" },
+          { q: "② A：我不會上網訂票，怎麼辦？\n   B：我教過你好幾次了，你還＿＿＿＿＿＿＿＿＿＿？", sample: "不會訂嗎 / 不知道怎麼訂嗎" },
+          { q: "③ A：便利商店「拿貼紙換禮物」的活動結束了，真的嗎？\n   B：你不知道？我＿＿＿＿＿＿＿＿＿＿？", sample: "上禮拜不是告訴過你了嗎" }
+        ],
+        aiQuiz: {
+          q: "【AI 語境配對】朋友已經感冒發燒了，卻還想吃冰淇淋，你怎麼用「反問句」提醒他？",
+          options: [
+            "你不是生病了嗎？怎麼還可以吃冰淇淋？",
+            "你生病了嗎？你想吃冰淇淋嗎？",
+            "你快點兒吃冰淇淋吧！"
+          ],
+          ans: 0
+        }
+      },
+      {
+        title: "II. 催促與放緩：快／慢（一）點兒 + V",
+        page: "p.208-209",
+        structure: "快／慢 +（一）點兒 + V",
+        explanation: "祈使句型。「快（一）點兒 + V」用於時間不夠或情況緊急，催促對方趕快行動；「慢（一）點兒 + V」則用於提醒對方不急、放慢動作以免出錯或受傷。",
+        examples: [
+          "1. 下雨了，你別在外面玩，快（一）點兒進來！",
+          "2. 已經八點了，你快（一）點兒起床，要不然上班會遲到的！",
+          "3. 茶還很熱，你慢（一）點兒喝吧！"
+        ],
+        origExercises: [
+          { q: "① 時間不早了，可是孩子還在玩，不寫作業。你會跟他說什麼？\n   你：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿", sample: "已經很晚了，你快點兒去寫作業！" },
+          { q: "② 明天要考試，弟弟還在看電視，媽媽會對他說什麼呢？\n   媽媽：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿", sample: "明天要考試了，快點兒關電視去念書吧！" },
+          { q: "③ 下課了，大家準備要回家時，老師要請山本良介寫一下資料，她會怎麼跟良介說？\n   老師：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿", sample: "良介，請你慢點兒走，先幫我寫一下資料。" }
+        ],
+        aiQuiz: {
+          q: "【AI 情境選擇】外面的地板剛洗好，非常滑，你應該對正要走過去的同學說什麼？",
+          options: [
+            "你快一點兒跑過去！",
+            "地很滑，你慢一點兒走！",
+            "你怎麼這麼慢！"
+          ],
+          ans: 1
+        }
+      },
+      {
+        title: "III. 終點標記：V 到 + 地方／時間／範圍或數量",
+        page: "p.209-210",
+        structure: "(一) V 到 + 地方 + 來/去 ｜ (二) V 到 + 時間 ｜ (三) V 到 + 範圍/數量",
+        explanation: "「V 到」後面加上動作到達的目標終點，可以是空間地點、時間點，或是學習進度、數量範圍。",
+        examples: [
+          "【地方】1. 這張書桌，我想搬到房間去。\n【地方】2. A：我的中文書，你拿到哪裡去了？ B：我拿到客廳去了。\n【地方】3. A：請問從這裡走到台北101去要多久？ B：不太遠，大概十分鐘就走到了。",
+          "【時間】1. 爸爸昨天工作到晚上九點才回家。\n【時間】2. 我們今天要去逛街，打算逛到晚上十點。\n【時間】3. A：你昨天寫作業寫到幾點？ B：寫到半夜兩點才寫完。",
+          "【範圍/數量】1. 昨天的歷史課，教授教到第一百六十頁了。\n【範圍/數量】2. 到那個博物館參觀的遊客，今年增加到三百多萬人了。\n【範圍/數量】3. A：下星期一的考試，你念到第幾課了？ B：我念到第三課了，還有兩課沒念。"
+        ],
+        origExercises: [
+          { q: "① A：我要去那家百貨公司，請問搭捷運要搭到哪裡？\n   B：你可以搭藍線，＿＿＿＿＿＿＿＿＿＿＿＿。", sample: "搭到市政府站下車" },
+          { q: "② A：這些家具，你打算搬到哪裡去？\n   B：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿。", sample: "我打算搬到新租的公寓去" },
+          { q: "③ A：這間公寓，你打算租到什麼時候？\n   B：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿。", sample: "我打算租到明年六月畢業的時候" }
+        ],
+        aiQuiz: {
+          q: "【AI 語序重組】請選出正確的句子：",
+          options: [
+            "這次期末考要考從第五課到第八課。",
+            "這次期末考要從第五課考到第八課。",
+            "這次期末考從第五課要考第八課到。"
+          ],
+          ans: 1
+        }
+      },
+      {
+        title: "IV. 疑問詞表否定：不/沒……疑問詞 / 不怎麼……",
+        page: "p.210-211",
+        structure: "S + 不/沒 + V + 多少/什麼/哪裡/誰 ｜ S + 不怎麼 + Vs / Vaux + V",
+        explanation: "當說話者不想明確表態，或委婉表示「數量不多、沒有特定對象、程度不高」時，常在否定詞（不、沒）後面搭配疑問詞（多少、幾、什麼、誰、哪裡、怎麼）。",
+        examples: [
+          "1. 那部卡通不怎麼有名，很多人都沒看過。",
+          "2. 王先生不怎麼願意做家事，讓太太不怎麼高興。",
+          "3. 我昨天下午沒去哪裡／什麼地方，都在家休息。",
+          "4. A：你昨天吃了那麼多小吃，花了多少錢？ B：沒花多少錢，因為價錢都不貴。",
+          "5. A：你想去便利商店買什麼？ B：我不想買什麼，只想看看新活動的海報。",
+          "6. 女朋友：你昨天跟誰去KTV唱歌了？快點兒說！ 男朋友：你放心，我沒跟誰去，我是一個人去的！"
+        ],
+        origExercises: [
+          { q: "① A：那塊雞排看起來很辣，你怎麼敢吃？\n   B：看起來好像很辣，其實＿＿＿＿＿＿＿＿＿＿。", sample: "不怎麼辣" },
+          { q: "② A：這個週末你打算去哪裡？\n   B：快要期末考了，我＿＿＿＿＿＿＿＿＿＿，要在家庭用功讀書。", sample: "不想去哪裡 / 沒打算去什麼地方" },
+          { q: "③ A：你買的這個皮包多少錢？\n   B：＿＿＿＿＿＿＿＿＿＿，才一百塊。", sample: "沒花多少錢" },
+          { q: "④ A：你有幾個外國朋友？\n   B：＿＿＿＿＿＿＿＿＿＿，只有兩個。", sample: "沒幾個外國朋友" },
+          { q: "⑤ A：春假的時候，你是跟誰一起去花蓮的？\n   B：＿＿＿＿＿＿＿＿＿＿，我是一個人去的。", sample: "我沒跟誰一起去" }
+        ],
+        aiQuiz: {
+          q: "【AI 語意判斷】「這學期我沒修多少課」是什麼意思？",
+          options: [
+            "請問這學期我修了幾門課？",
+            "這學期我修的課很少。",
+            "這學期我一門課都沒修。"
+          ],
+          ans: 1
+        }
+      },
+      {
+        title: "V. 驚訝感嘆：怎麼這麼 + Vs！／？",
+        page: "p.212",
+        structure: "（S +）怎麼這麼 + Vs！／？",
+        explanation: "表達對某種情況感到驚訝、意外或不敢相信，通常屬於感嘆語氣，不一定需要對方回答原因。",
+        examples: [
+          "1. A：這個卡通人物怎麼這麼可愛！ B：真的嗎？我覺得史努比比較可愛。",
+          "2. 你怎麼這麼累？昨天晚上沒睡覺嗎？",
+          "3. 明天有期末考，你怎麼這麼輕鬆？都準備好了嗎？"
+        ],
+        origExercises: [
+          { q: "① A：你哥哥＿＿＿＿＿＿＿＿＿＿＿＿？\n   B：因為他常常運動啊！", sample: "身體怎麼這麼好 / 怎麼這麼高又這麼帥" },
+          { q: "② A：＿＿＿＿＿＿＿＿＿＿＿＿！\n   B：對啊，我也覺得這篇很難翻。", sample: "這篇文章怎麼這麼難翻譯" },
+          { q: "③ A：珍珠奶茶＿＿＿＿＿＿＿＿＿＿＿＿？\n   B：如果你覺得太甜，下次可以選無糖或是半糖的。", sample: "怎麼這麼甜" }
+        ],
+        aiQuiz: {
+          q: "【AI 情境選擇】看到朋友只學了三個月中文，就會寫五百字的作文，你會怎麼稱讚他？",
+          options: [
+            "你的中文怎麼這麼差！",
+            "你的中文怎麼這麼厲害！",
+            "你的中文不怎麼厲害。"
+          ],
+          ans: 1
+        }
+      },
+      {
+        title: "VI. 空間與容量可能補語：V 得下／V 不下",
+        page: "p.212-213",
+        structure: "V + 得下 / 不下（+ O）",
+        explanation: "「下」作為結果補語，表示空間、容器或身體胃口是否有足夠容量容納受事者。此句型僅用於可能補語結構（V 得下 / V 不下）。",
+        examples: [
+          "1. 這個盒子裝得下幾塊蛋糕？",
+          "2. 這間公寓很大，住得下六個人。",
+          "3. 我剛剛吃了好幾個包子，現在吃不下了。"
+        ],
+        origExercises: [
+          { q: "① A：我多買了一碗滷肉飯，你要不要吃？\n   B：謝謝，我剛吃了半隻烤雞，現在＿＿＿＿＿＿＿＿＿＿。", sample: "真的吃不下了" },
+          { q: "② A：我們五個人要去阿里山，可以坐你的車去嗎？\n   B：我的車很小，＿＿＿＿＿＿＿＿＿＿。", sample: "坐不下五個人" },
+          { q: "③ A：你可以把你去旅遊的心情寫在明信片上，寄給我嗎？\n   B：明信片那麼小，＿＿＿＿＿＿＿＿＿＿？", sample: "怎麼寫得下那麼多字" }
+        ],
+        aiQuiz: {
+          q: "【AI 語法填空】我的背包太小了，這本大字典太厚，根本＿＿＿＿！",
+          options: [
+            "裝不下",
+            "吃不下",
+            "住不下"
+          ],
+          ans: 0
+        }
+      },
+      {
+        title: "短文語法 I. 狀態動詞重疊：VsVs 的/地、XXYY 的/地",
+        page: "p.218-219",
+        structure: "(一) S + VsVs/XXYY + 的 ｜ (二) VsVs/XXYY 的 + N ｜ (三) S + V 得 + VsVs/XXYY 的 ｜ (四) S + VsVs/XXYY（地）+ V",
+        explanation: "單音節狀態動詞重疊為「AA 的/地」（如：紅紅的、慢慢地），雙音節（XY）重疊為「XXYY 的/地」（如：乾乾淨淨的、開開心心地）。重疊本身已含程度加深之意，不可再加「很、真、太」。注意：貴、忙、新、好吃、好喝、可愛、可怕、不錯 等詞不可重疊。",
+        examples: [
+          "【作謂語】1. 那些玫瑰花紅紅的，真漂亮！ / 2. 這塊蛋糕香香甜甜的，真好吃！ / 3. 這家民宿乾乾淨淨的，住起來很舒服。",
+          "【作定語】1. 他有一張圓圓的臉，很可愛！ / 2. 去花蓮可以看到藍藍的大海，風景美極了。 / 3. 明天晚上我要去台北101，參加熱熱鬧鬧的跨年晚會。",
+          "【作補語】1. 他每天早上都吃得飽飽的再去上班。 / 2. 老師說，漢字一定要寫得清清楚楚的。 / 3. 因為有客人要來，所以他把房間打掃得乾乾淨淨的。",
+          "【作狀語】1. 這座森林的風景很美，我們慢慢地看吧。 / 2. 店員客客氣氣地跟顧客介紹新商品，希望他們多買一些。 / 3. 他很喜歡學中文，每天都開開心心地去上課。"
+        ],
+        origExercises: [
+          { q: "【選詞重疊填空：髒、暖和、舒服、開心】\n① 你的手＿＿＿＿＿＿＿＿＿＿，快去洗一洗。", sample: "髒髒的" },
+          { q: "② 那件＿＿＿＿＿＿＿＿＿＿毛衣，很多人都想買。", sample: "暖暖和和的" },
+          { q: "③ 這間公寓又大又乾淨，我跟室友住得＿＿＿＿＿＿＿＿＿＿。", sample: "舒舒服服的" },
+          { q: "④ 我們＿＿＿＿＿＿＿＿＿＿慶祝他的生日。", sample: "開開心心地" }
+        ],
+        aiQuiz: {
+          q: "【AI 病句判斷】下列哪一個句子是「正確」的？",
+          options: [
+            "老師把生字的意思說得很清清楚楚的。",
+            "老師把生字的意思說得清清楚楚的。",
+            "這支手機新新的，真好看！"
+          ],
+          ans: 1
+        }
+      }
+    ];
+
+    // 4. 短文資料 (原教材 p.213-215)
+    const readingData = [
+      {
+        trad: "山本良介的大學跟台灣的大學有交換學生的計畫，他很喜歡台灣，所以決定來台灣留學。到了台灣以後，他不但認真地上日文系的課，也在華語文中心學習中文。以前他在日本就學過漢語，他覺得寫漢字一點兒也不難，但是文法跟聲調這兩個部分還需要多練習。",
+        simp: "山本良介的大学跟台湾的大学有交换学生的计划，他很喜欢台湾，所以决定来台湾留学。到了台湾以后，他不但认真地上日文系的课，也在华语文中心学习中文。以前他在日本就学过汉语，他觉得写汉字一点儿也不难，但是文法跟声调这两个部分还需要多练习。",
+        pinyin: "Shānběn Liángjiè de dàxué gēn Táiwān de dàxué yǒu jiāohuàn xuéshēng de jìhuà, tā hěn xǐhuān Táiwān, suǒyǐ juédìng lái Táiwān liúxué. Dào le Táiwān yǐhòu, tā búdàn rènzhēn de shàng Rìwén xì de kè, yě zài Huáyǔwén Zhōngxīn xuéxí Zhōngwén. Yǐqián tā zài Rìběn jiù xué guò Hànyǔ, tā juéde xiě Hànzì yìdiǎnr yě bù nán, dànshì wénfǎ gēn shēngdiào zhè liǎng ge bùfèn hái xūyào duō liànxí.",
+        eng: "Ryosuke Yamamoto's university has an exchange program with a Taiwanese university. He likes Taiwan very much, so he decided to study in Taiwan. After coming to Taiwan, he not only earnestly studies the courses at the Department of Japanese Language, but also learns Chinese at the Center of Chinese Language and Culture. He has already been learning Chinese in Japan. He thinks writing Chinese characters isn't difficult at all, but in the two aspects of grammar and tones, he still needs more practice."
+      },
+      {
+        trad: "良介的中文老師很好，總是把生字、課文的意思說得清清楚楚的。不但要他們用文法造句，還要用中文報告，讓他們練習表達自己的意見。期末考有筆試和作文，如果文章的錯字太多或是文法不對，成績就比較差。",
+        simp: "良介的中文老师很好，总是把生字、课文的意思说得清清楚楚的。不但要他们用文法造句，还要用中文报告，让他们练习表达自己的意见。期末考有笔试和作文，如果文章的错字太多或是文法不对，成绩就比较差。",
+        pinyin: "Liángjiè de Zhōngwén lǎoshī hěn hǎo, zǒngshì bǎ shēngzì, kèwén de yìsi shuō de qīngqīngchǔchǔ de. Búdàn yào tāmen yòng wénfǎ zào jù, hái yào yòng Zhōngwén bàogào, ràng tāmen liànxí biǎodá zìjǐ de yìjiàn. Qīmòkǎo yǒu bǐshì hé zuòwén, rúguǒ wénzhāng de cuòzì tài duō huòshì wénfǎ bú duì, chéngjì jiù bǐjiào chà.",
+        eng: "Ryosuke's Chinese teacher is very good. He always explains new vocabulary and the meaning of texts clearly. He asks them not only to build sentences with grammar, but also to make presentations in Chinese, letting them practice expressing their own opinions. On the final exam, they have to write a composition and take a written test. However, if too many characters are written incorrectly in the essay or if the grammar is incorrect, the score will be lower."
+      },
+      {
+        trad: "良介在台灣交了不少朋友，他常跟他們練習說中文，問他們語法的問題。剛開學的時候，同學帶他去圖書館，教他怎麼借書、還書。有一次他搭錯車、迷了路，台灣人看到他很著急的樣子，就馬上來幫忙，告訴他怎麼走，讓良介非常感動。",
+        simp: "良介在台湾交了不少朋友，他常跟他们练习说中文，问他们语法的问题。刚开学的时候，同学带他去图书馆，教他怎么借书、还书。有一次他搭错车、迷了路，台湾人看到他很着急的样子，就马上来帮忙，告诉他怎么走，让良介非常感动。",
+        pinyin: "Liángjiè zài Táiwān jiāo le bù shǎo péngyǒu, tā cháng gēn tāmen liànxí shuō Zhōngwén, wèn tāmen yǔfǎ de wèntí. Gāng kāixué de shíhòu, tóngxué dài tā qù túshūguǎn, jiāo tā zěnme jiè shū, huán shū. Yǒu yí cì tā dā cuò chē, mí le lù, Táiwānrén kàndào tā hěn zháojí de yàngzi, jiù mǎshàng lái bāngmáng, gàosù tā zěnme zǒu, ràng Liángjiè fēicháng gǎndòng.",
+        eng: "Ryosuke makes a lot of friends in Taiwan. He often practices speaking Chinese with them and asks them questions about grammar. When the semester just began, the classmates took him to the library and taught him how to borrow or return books. Once he took the wrong bus and got lost. Taiwanese people saw he was so anxious that they immediately came to help and told him how to get there. It made him feel very touched."
+      },
+      {
+        trad: "最近，同學們都在討論找工作的問題。良介也很煩惱，所以他決定先請教授給他一些建議，再想想將來要怎麼做。",
+        simp: "最近，同学们都在讨论找工作的问题。良介也很烦恼，所以他决定先请教授给他一些建议，再想想将来要怎么做。",
+        pinyin: "Zuìjìn, tóngxuémen dōu zài tǎolùn zhǎo gōngzuò de wèntí. Liángjiè yě hěn fánnǎo, suǒyǐ tā juédìng xiān qǐng jiàoshòu gěi tā yìxiē jiànyì, zài xiǎngxiang jiānglái yào zěnme zuò.",
+        eng: "Recently, all of the classmates have been talking about the problem of finding a job. Ryosuke is also troubled with this, so he decides to ask a professor for some advice and then think of what to do in the future."
+      }
+    ];
+
+    // AI 補充：短文是非題
+    const readingTFData = [
+      { q: "1. 山本良介以前在日本沒有學過漢語，到了台灣才開始學。", ans: false },
+      { q: "2. 良介覺得寫漢字一點兒也不難，但文法和聲調還需要多練習。", ans: true },
+      { q: "3. 良介的中文課期末考不用考筆試，只要交報告跟做語言交換就好了。", ans: false },
+      { q: "4. 良介最近因為找工作的問題覺得很煩惱，打算請教授給他一些建議。", ans: true }
+    ];
+
+    // ================= 渲染函式 =================
+
+    function renderDialogue() {
+      const container = document.getElementById('dialogue-container');
+      container.innerHTML = dialogueData.map((line) => {
+        const isMasked = (roleMask === line.role);
+        const badgeColor = line.role === 'meixin' ? 'bg-pink-100 text-pink-800 border-pink-200' : 'bg-indigo-100 text-indigo-800 border-indigo-200';
+        const textToShow = isSimp ? line.simp : line.trad;
+
+        return `
+          <div class="pt-3 first:pt-0 flex gap-3 items-start">
+            <span class="px-2.5 py-1 rounded-md text-xs font-bold border shrink-0 mt-1 ${badgeColor}">
+              ${line.speaker}
+            </span>
+            <div class="space-y-1 flex-grow">
+              ${showPinyin ? `<p class="text-xs text-slate-500 font-mono">${line.pinyin}</p>` : ''}
+              <p class="text-base font-medium text-slate-900 ${isMasked ? 'blur-sm select-none cursor-pointer hover:blur-none transition' : ''}" title="${isMasked ? '滑過或點擊可暫時顯示' : ''}">
+                ${textToShow}
+              </p>
+              ${showEng ? `<p class="text-xs text-slate-500 italic">${line.eng}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDialogueQuiz() {
+      const container = document.getElementById('dialogue-quiz-container');
+      container.innerHTML = dialogueQuizData.map((item, qIdx) => `
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+          <p class="font-medium text-slate-800">${item.q}</p>
+          <div class="space-y-1">
+            ${item.options.map((opt, oIdx) => `
+              <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded-md">
+                <input type="radio" name="dquiz-${qIdx}" value="${oIdx}" class="text-purple-600">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <p id="dquiz-fb-${qIdx}" class="text-xs font-bold hidden"></p>
+        </div>
+      `).join('');
+    }
+
+    function checkDialogueQuiz() {
+      dialogueQuizData.forEach((item, qIdx) => {
+        const selected = document.querySelector(`input[name="dquiz-${qIdx}"]:checked`);
+        const fb = document.getElementById(`dquiz-fb-${qIdx}`);
+        fb.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+        if (!selected) {
+          fb.textContent = "⚠️ 請選擇一個答案";
+          fb.classList.add('text-rose-600');
+        } else if (parseInt(selected.value) === item.ans) {
+          fb.textContent = "✅ 答對了！";
+          fb.classList.add('text-emerald-600');
+        } else {
+          fb.textContent = `❌ 答錯囉，正確答案是：「${item.options[item.ans]}」`;
+          fb.classList.add('text-rose-600');
+        }
+      });
+    }
+
+    function renderVocab() {
+      const search = document.getElementById('vocab-search').value.trim().toLowerCase();
+      const grid = document.getElementById('vocab-grid');
+
+      const filtered = vocabData.filter(v => {
+        const matchSec = currentVocabFilter === 'all' || v.sec === currentVocabFilter;
+        const matchSearch = !search ||
+          v.trad.includes(search) ||
+          v.simp.includes(search) ||
+          v.pinyin.toLowerCase().includes(search) ||
+          v.eng.toLowerCase().includes(search);
+        return matchSec && matchSearch;
+      });
+
+      grid.innerHTML = filtered.map(v => {
+        const word = isSimp ? v.simp : v.trad;
+        const secTag = v.sec === 'dialogue' ? '對話 09-2' : '短文 09-4';
+        return `
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300 transition flex flex-col justify-between space-y-2">
+            <div>
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="text-xl font-bold text-slate-900">${word}</span>
+                  ${showPinyin ? `<span class="ml-2 text-sm text-blue-600 font-mono">${v.pinyin}</span>` : ''}
+                </div>
+                <span class="text-xs px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-mono">${v.pos}</span>
+              </div>
+              ${showEng ? `<p class="text-xs text-slate-600 mt-1">${v.eng}</p>` : ''}
+            </div>
+            ${v.ex ? `
+              <div class="pt-2 border-t border-slate-100 text-xs text-slate-700 bg-slate-50/70 p-2 rounded-lg">
+                <span class="font-bold text-slate-500">例句：</span>${v.ex}
+              </div>
+            ` : `<div class="text-[11px] text-slate-400 text-right">${secTag}</div>`}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterVocab(sec) {
+      currentVocabFilter = sec;
+      ['all', 'dialogue', 'reading'].forEach(k => {
+        const btn = document.getElementById(`vbtn-${k}`);
+        if (k === sec) {
+          btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200";
+        }
+      });
+      renderVocab();
+    }
+
+    function renderVocabCloze() {
+      const container = document.getElementById('vocab-cloze-container');
+      container.innerHTML = vocabClozeData.map((item, idx) => `
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-wrap items-center gap-1.5">
+          <span>${item.prefix}</span>
+          <select id="vcloze-${idx}" class="border border-purple-300 rounded-lg px-2 py-1 bg-white font-bold text-purple-800">
+            <option value="">--請選擇--</option>
+            ${item.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+          </select>
+          <span>${item.suffix}</span>
+          <span id="vcloze-fb-${idx}" class="ml-2 text-xs font-bold hidden"></span>
+        </div>
+      `).join('');
+    }
+
+    function checkVocabCloze() {
+      vocabClozeData.forEach((item, idx) => {
+        const val = document.getElementById(`vcloze-${idx}`).value;
+        const fb = document.getElementById(`vcloze-fb-${idx}`);
+        fb.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+        if (val === item.ans) {
+          fb.textContent = "✅ 正確";
+          fb.classList.add('text-emerald-600');
+        } else {
+          fb.textContent = `❌ 答案為「${item.ans}」`;
+          fb.classList.add('text-rose-600');
+        }
+      });
+    }
+
+    function renderGrammar() {
+      const nav = document.getElementById('grammar-nav');
+      nav.innerHTML = grammarData.map((g, idx) => `
+        <button onclick="selectGrammar(${idx})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${idx === currentGrammarIdx ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+          ${g.title.split('：')[0]}
+        </button>
+      `).join('');
+
+      const g = grammarData[currentGrammarIdx];
+      const detail = document.getElementById('grammar-detail-container');
+      detail.innerHTML = `
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+          <div class="flex flex-wrap justify-between items-start gap-2 border-b pb-3">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">${g.title}</h3>
+              <p class="text-sm font-mono text-blue-700 bg-blue-50 inline-block px-3 py-1 rounded-lg mt-2">句型結構：${g.structure}</p>
+            </div>
+            <span class="badge-orig">📘 原教材 (${g.page})</span>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="font-bold text-sm text-slate-700">📌 語法說明：</h4>
+            <p class="text-sm text-slate-600 leading-relaxed">${g.explanation}</p>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="font-bold text-sm text-slate-700">📘 原教材例句：</h4>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-sm whitespace-pre-line leading-relaxed">${g.examples.join('\n\n')}</div>
+          </div>
+
+          <div class="space-y-3 pt-2 border-t">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h4 class="font-bold text-sm text-slate-800">✏️ 原教材 Exercise（開放式造句練習與參考答案）</h4>
+              <span class="badge-orig">📘 原教材 Exercise</span>
+            </div>
+            <div class="space-y-3">
+              ${g.origExercises.map((ex, i) => `
+                <div class="p-3 rounded-xl border border-slate-200 bg-white space-y-2 text-sm">
+                  <p class="whitespace-pre-line font-medium text-slate-800">${ex.q}</p>
+                  <div class="flex flex-wrap sm:flex-nowrap gap-2">
+                    <input type="text" placeholder="請在此輸入你的句子..." class="w-full flex-grow border border-slate-300 rounded-lg px-3 py-1.5 text-sm">
+                    <button onclick="document.getElementById('gsample-${i}').classList.toggle('hidden')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium shrink-0">
+                      顯示參考答案
+                    </button>
+                  </div>
+                  <p id="gsample-${i}" class="text-xs text-blue-700 bg-blue-50 p-2 rounded-lg hidden">💡 參考答案：${ex.sample}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- AI 補充單題即時檢測 -->
+          <div class="p-4 rounded-xl bg-purple-50/60 border border-purple-200 space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h4 class="font-bold text-sm text-purple-900">${g.aiQuiz.q}</h4>
+              <span class="badge-ai">✨ AI 補充檢測</span>
+            </div>
+            <div class="space-y-1.5 text-sm">
+              ${g.aiQuiz.options.map((opt, oIdx) => `
+                <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-white">
+                  <input type="radio" name="g-ai-quiz" value="${oIdx}">
+                  <span>${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="checkGrammarAIQuiz(${g.aiQuiz.ans})" class="px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium">核對答案</button>
+              <span id="g-ai-fb" class="text-xs font-bold"></span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectGrammar(idx) {
+      currentGrammarIdx = idx;
+      renderGrammar();
+    }
+
+    function checkGrammarAIQuiz(ans) {
+      const sel = document.querySelector('input[name="g-ai-quiz"]:checked');
+      const fb = document.getElementById('g-ai-fb');
+      if (!sel) {
+        fb.textContent = "⚠️ 請先選擇一個選項";
+        fb.className = "text-xs font-bold text-rose-600";
+      } else if (parseInt(sel.value) === ans) {
+        fb.textContent = "✅ 完全正確！";
+        fb.className = "text-xs font-bold text-emerald-600";
+      } else {
+        fb.textContent = "❌ 再想一想喔！";
+        fb.className = "text-xs font-bold text-rose-600";
+      }
+    }
+
+    function renderReading() {
+      const container = document.getElementById('reading-container');
+      container.innerHTML = readingData.map(p => {
+        const text = isSimp ? p.simp : p.trad;
+        return `
+          <div class="p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200 space-y-2">
+            ${showPinyin ? `<p class="text-xs text-slate-500 font-mono leading-relaxed">${p.pinyin}</p>` : ''}
+            <p class="text-lg text-slate-900 font-medium leading-loose indent-8">${text}</p>
+            ${showEng ? `<p class="text-xs text-slate-500 italic leading-relaxed pt-1 border-t border-slate-100">${p.eng}</p>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderReadingTF() {
+      const container = document.getElementById('reading-tf-container');
+      container.innerHTML = readingTFData.map((item, idx) => `
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+          <p class="font-medium text-slate-800">${item.q}</p>
+          <div class="flex items-center gap-4 flex-wrap">
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" name="rtf-${idx}" value="true"> <span>⭕ 正確 (True)</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" name="rtf-${idx}" value="false"> <span>❌ 錯誤 (False)</span>
+            </label>
+            <span id="rtf-fb-${idx}" class="text-xs font-bold hidden"></span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function checkReadingTF() {
+      readingTFData.forEach((item, idx) => {
+        const sel = document.querySelector(`input[name="rtf-${idx}"]:checked`);
+        const fb = document.getElementById(`rtf-fb-${idx}`);
+        fb.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+        if (!sel) {
+          fb.textContent = "⚠️ 未作答";
+          fb.classList.add('text-rose-600');
+        } else if ((sel.value === 'true') === item.ans) {
+          fb.textContent = "✅ 答對了！";
+          fb.classList.add('text-emerald-600');
+        } else {
+          fb.textContent = `❌ 答錯囉（應為 ${item.ans ? '正確' : '錯誤'}）`;
+          fb.classList.add('text-rose-600');
+        }
+      });
+    }
+
+    // ================= 控制與輔助函式 =================
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('text-slate-600');
+      });
+      const activeBtnId = 'nav-' + tabId.replace('tab-', '');
+      const activeBtn = document.getElementById(activeBtnId);
+      activeBtn.classList.add('tab-active');
+      activeBtn.classList.remove('text-slate-600');
+    }
+
+    function toggleCharMode() {
+      isSimp = !isSimp;
+      document.getElementById('btn-char-mode').textContent = isSimp ? '簡體中 (點此回正體)' : '正體 / 簡體';
+      renderAll();
+    }
+
+    function togglePinyin() {
+      showPinyin = !showPinyin;
+      renderAll();
+    }
+
+    function toggleEnglish() {
+      showEng = !showEng;
+      renderAll();
+    }
+
+    function setRoleMask(role) {
+      roleMask = role;
+      ['all', 'meixin', 'kexin'].forEach(r => {
+        const btn = document.getElementById(`role-${r}`);
+        if (r === role) {
+          btn.className = "px-2.5 py-1 rounded-lg bg-blue-600 text-white font-medium transition";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+        }
+      });
+      renderDialogue();
+    }
+
+    function insertChip(word) {
+      const ta = document.getElementById('speaking-draft');
+      ta.value += (ta.value ? ' ' : '') + word;
+      ta.focus();
+    }
+
+    function changeSpeed(playerId, speed) {
+      const audio = document.getElementById(playerId);
+      if (audio) audio.playbackRate = parseFloat(speed);
+    }
+
+    function toggleChecklistModal() {
+      document.getElementById('checklist-modal').classList.toggle('hidden');
+    }
+
+    function toggleAudioModal() {
+      document.getElementById('audio-modal').classList.toggle('hidden');
+    }
+
+    function saveAudioUrls() {
+      const tracks = ['09-1', '09-2', '09-3', '09-4'];
+      tracks.forEach(t => {
+        const val = document.getElementById(`input-audio-${t}`).value.trim();
+        audioUrls[t] = val;
+        applyAudioUrl(t, val);
+      });
+      toggleAudioModal();
+    }
+
+    function applyAudioUrl(track, url) {
+      const player = document.getElementById(`player-${track}`);
+      const status = document.getElementById(`status-audio-${track}`);
+      const input = document.getElementById(`input-audio-${track}`);
+      if (input) input.value = url || '';
+      if (url) {
+        player.src = url;
+        status.textContent = `✅ 已連結音訊：${url}`;
+        status.className = "text-xs text-emerald-600 font-medium mt-0.5";
+      } else {
+        player.removeAttribute('src');
+        status.textContent = "尚未設定音訊網址（請點擊右上角「⚙️ 音訊網址設定」填入）";
+        status.className = "text-xs text-slate-500 mt-0.5";
+      }
+    }
+
+    function renderAll() {
+      renderDialogue();
+      renderVocab();
+      renderGrammar();
+      renderReading();
+    }
+
+    // 初始化
+    window.onload = function () {
+      renderAll();
+      renderDialogueQuiz();
+      renderVocabCloze();
+      renderReadingTF();
+    };
+  </script>
+</body>
+</html>
