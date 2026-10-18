@@ -520,7 +520,12 @@
     let roleMask = 'all';
     let currentVocabFilter = 'all';
     let currentGrammarIdx = 0;
-    const audioUrls = { '09-1': '', '09-2': '', '09-3': '', '09-4': '' };
+    const audioUrls = {
+      '09-1': './audio/B2-09-1-1.mp3',
+      '09-2': './audio/B2-09-1-2.mp3',
+      '09-3': './audio/B2-09-2-1.mp3',
+      '09-4': './audio/B2-09-2-2.mp3'
+    };
 
     // 1. 對話資料 (原教材 p.201-204)
     const dialogueData = [
@@ -1326,6 +1331,7 @@
       renderDialogueQuiz();
       renderVocabCloze();
       renderReadingTF();
+      Object.entries(audioUrls).forEach(([track, url]) => applyAudioUrl(track, url));
     };
   </script>
 </body>
